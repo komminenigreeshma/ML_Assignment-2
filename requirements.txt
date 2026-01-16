@@ -5,3 +5,4 @@ pandas
 xgboost
 joblib
 tabulate
+seaborn
