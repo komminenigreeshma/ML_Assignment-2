@@ -27,7 +27,7 @@ uploaded_file = st.sidebar.file_uploader("Upload Test CSV", type=["csv"])
 
 # Option to download the test file (generated in training)
 try:
-    with open("test.csv", "rb") as f:
+    with open("dataset/test.csv", "rb") as f:
         st.sidebar.download_button(
             label="⬇️ Download Sample Test File",
             data=f,
