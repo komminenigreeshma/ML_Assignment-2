@@ -56,13 +56,14 @@ models = {
 }
 
 # Sidebar
-st.sidebar.header("⚙️ Controls")
-with st.sidebar.expander("Model Selection & Data Upload", expanded=True):
+st.sidebar.header("📖 Quick Guide")
+with st.sidebar.expander("💡 How to Use", expanded=True):
+    st.write("1. Upload a test CSV file.\n2. Select a model.\n3. View metrics, confusion matrix, and classification report.\n4. Download predictions if needed.")
+
+st.sidebar.header("🎛️ Model & Data Settings")
+with st.sidebar.expander("🧩 Choose Model & Upload Data", expanded=True):
     model_choice = st.selectbox("Select Model", ["-- Select Model --"] + list(models.keys()))
     uploaded_file = st.file_uploader("Upload Test CSV", type=["csv"])
-
-with st.sidebar.expander("ℹ️ How to Use"):
-    st.write("1. Upload a test CSV file.\n2. Select a model.\n3. View metrics, confusion matrix, and classification report.\n4. Download predictions if needed.")
 
 try:
     with open("dataset/test.csv", "rb") as f:
