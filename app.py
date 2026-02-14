@@ -57,8 +57,11 @@ models = {
 
 # Sidebar
 
-# Quick Guide (collapsed by default)
-st.sidebar.header("📖 Quick Guide")
+# Quick Guide (smaller size, collapsed by default)
+st.sidebar.markdown(
+    "<h4 style='color:#00c9a7; margin-bottom:0;'>📖 Quick Guide</h4>",
+    unsafe_allow_html=True
+)
 with st.sidebar.expander("💡 How to Use", expanded=False):  # collapsed initially
     st.write(
         "1. Upload a test CSV file.\n"
@@ -67,23 +70,26 @@ with st.sidebar.expander("💡 How to Use", expanded=False):  # collapsed initia
         "4. Download predictions if needed."
     )
 
-# Model & Data Settings
-st.sidebar.header("🎛️ Model & Data Settings")
-with st.sidebar.expander("🧩 Choose Model & Upload Data", expanded=True):  # open by default
-    model_choice = st.selectbox("Select Model", ["-- Select Model --"] + list(models.keys()))
-    uploaded_file = st.file_uploader("Upload Test CSV", type=["csv"])
-
 # Sample file download
 try:
     with open("dataset/test.csv", "rb") as f:
         st.sidebar.download_button(
-            label="⬇️ Download Sample Test File",
+            label="⬇️ Download Test File",
             data=f,
             file_name="test.csv",
             mime="text/csv"
         )
 except FileNotFoundError:
     st.sidebar.warning("No test.csv found. Run Training_model.py to generate it.")
+
+# Model & Data Settings
+st.sidebar.markdown(
+    "<h4 style='color:#00c9a7; margin-bottom:0;'>🎛️ Model & Data Settings</h4>",
+    unsafe_allow_html=True
+)
+with st.sidebar.expander("🧩 Choose Model & Upload Data", expanded=True):
+    model_choice = st.selectbox("Select Model", ["-- Select Model --"] + list(models.keys()))
+    uploaded_file = st.file_uploader("Upload Test CSV", type=["csv"])
 
 # Main logic
 if uploaded_file is not None and model_choice != "-- Select Model --":
