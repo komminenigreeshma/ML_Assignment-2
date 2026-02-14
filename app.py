@@ -12,46 +12,46 @@ from sklearn.metrics import (
 # Page config
 st.set_page_config(page_title="ML Assignment 2", page_icon="📊", layout="wide")
 
-# Global styling (pastel theme + cream sidebar)
+# Two-color styling
 st.markdown(
     """
     <style>
     .stApp {
-        background-color: #ffffff;
-        color: #333333;
+        background-color: #FDFDFD; /* background */
+        color: #2A9D8F; /* accent text */
     }
     h1, h2, h3, h4, h5, h6 {
-        color: #87CEFA; /* pastel blue */
+        color: #2A9D8F;
     }
     .stMetric {
-        background-color: #E6F7FF; /* pale blue */
+        background-color: #2A9D8F; /* accent background */
         border-radius: 8px;
         padding: 10px;
-        color: #333333;
+        color: #ffffff; /* white text */
     }
     [data-testid="stSidebar"] {
-        background-color: #FFF8E7; /* cream/beige */
-        color: #333333;
+        background-color: #FDFDFD;
+        color: #2A9D8F;
     }
     [data-testid="stSidebar"] h1, 
     [data-testid="stSidebar"] h2, 
     [data-testid="stSidebar"] h3 {
-        color: #87CEFA;
+        color: #2A9D8F;
     }
     [data-testid="stSidebar"] .st-expanderHeader {
-        background-color: #FFB6B3 !important; /* coral accent */
+        background-color: #2A9D8F !important;
         color: white !important;
         border-radius: 5px;
     }
     [data-testid="stSidebar"] .stSelectbox, 
     [data-testid="stSidebar"] .stFileUploader {
         background-color: #ffffff !important;
-        color: #333333 !important;
-        border: 1px solid #FFB6B3 !important;
+        color: #2A9D8F !important;
+        border: 1px solid #2A9D8F !important;
         border-radius: 5px;
     }
     [data-testid="stSidebar"] button {
-        background-color: #FFB6B3 !important;
+        background-color: #2A9D8F !important;
         color: white !important;
         border-radius: 5px;
     }
@@ -59,17 +59,17 @@ st.markdown(
         text-align: center;
         padding: 10px;
         font-size: 14px;
-        color: #666666;
+        color: #2A9D8F;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Gradient header banner
+# Header banner
 st.markdown(
     """
-    <div style="background: linear-gradient(to right, #87CEFA, #FFB6B3);
+    <div style="background-color: #2A9D8F;
                 padding: 20px; border-radius: 8px; text-align: center;">
         <h1 style="color: white; font-size: 36px;">ML Assignment 2 - Letter Recognition</h1>
         <p style="color: white; font-size: 18px;">Interactive evaluation of ML models on the UCI dataset</p>
@@ -152,13 +152,13 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         st.subheader("Confusion Matrix")
         cm = confusion_matrix(y_test, y_pred)
         fig, ax = plt.subplots(figsize=(12, 8))
-        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax,
+        sns.heatmap(cm, annot=True, fmt="d", cmap="BuGn", ax=ax,
                     xticklabels=le.classes_, yticklabels=le.classes_,
                     cbar_kws={'label': 'Number of Samples'})
-        ax.set_xlabel("Predicted", fontsize=12, fontweight="bold")
-        ax.set_ylabel("True", fontsize=12, fontweight="bold")
-        plt.xticks(rotation=45)
-        plt.yticks(rotation=0)
+        ax.set_xlabel("Predicted", fontsize=12, fontweight="bold", color="#2A9D8F")
+        ax.set_ylabel("True", fontsize=12, fontweight="bold", color="#2A9D8F")
+        plt.xticks(rotation=45, color="#2A9D8F")
+        plt.yticks(rotation=0, color="#2A9D8F")
         st.pyplot(fig)
 
     with tab3:
@@ -172,10 +172,10 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         st.subheader("Per-Class F1 Scores")
         metrics_df = pd.DataFrame(report_dict).transpose().iloc[:-3]
         fig, ax = plt.subplots(figsize=(14, 6))
-        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], palette=["#87CEFA", "#FFB6B3"], ax=ax)
-        plt.xticks(rotation=45)
-        plt.ylabel("F1 Score")
-        plt.title("Per-Class F1 Scores (A–Z)", color="#87CEFA")
+        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], color="#2A9D8F", ax=ax)
+        plt.xticks(rotation=45, color="#2A9D8F")
+        plt.ylabel("F1 Score", color="#2A9D8F")
+        plt.title("Per-Class F1 Scores (A–Z)", color="#2A9D8F")
         st.pyplot(fig)
 
     output_df = test_df.copy()
