@@ -1,7 +1,7 @@
 # ML_Assignment-2
 
 ## Problem Statement
-The objective of this assignment is to implement six machine learning classification models on a chosen dataset, evaluate their performance using standard metrics, and deploy an interactive Streamlit web application. This simulates a real-world ML workflow: modeling, evaluation, UI design, and deployment.
+The aim of this assignment is to design and evaluate six machine learning classification models on the UCI Letter Recognition dataset, compare their performance using multiple evaluation metrics, and present the results through a fully interactive Streamlit web application. The project demonstrates an end‑to‑end ML workflow including dataset handling, model training, metric analysis, user interface development, and deployment on Streamlit Community Cloud.
 
 ---
 
