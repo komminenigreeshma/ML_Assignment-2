@@ -31,11 +31,11 @@ The aim of this assignment is to design and evaluate six machine learning classi
 
 | ML Model Name       | Observation about model performance |
 |---------------------|-------------------------------------|
-| Logistic Regression | Performs reasonably well, but lower accuracy compared to tree-based models. High AUC indicates good separability. |
-| Decision Tree       | Strong performance, but slightly less robust than ensemble methods due to possible overfitting. |
-| KNN                 | Very strong results; dataset structure is well-suited for distance-based classification. |
-| Naive Bayes         | Weakest performer; independence assumption does not hold well for this dataset, though AUC remains high. |
-| Random Forest       | Excellent performance; balanced metrics and near-perfect AUC. Very reliable. |
-| XGBoost             | Best overall performer; slightly outperforms Random Forest in all metrics, showing the strength of gradient boosting. |
+| Logistic Regression | Performs reasonably well, but lower accuracy compared to tree-based models. High AUC indicates good separability, meaning the model distinguishes classes well even if raw accuracy is lower. However, being a linear model, it struggles with complex non-linear boundaries in the dataset. |
+| Decision Tree       | Strong performance with good accuracy. Easy to interpret, but prone to overfitting — especially on large datasets like this one. The slightly lower AUC compared to ensembles shows that single trees are less robust. |
+| KNN                 | Very strong results; dataset structure is well-suited for distance-based classification. High accuracy and AUC suggest that local neighborhood information is highly predictive. However, KNN can be computationally expensive on large datasets and sensitive to scaling. |
+| Naive Bayes         | Weakest performer overall. The independence assumption does not hold well for this dataset, leading to lower accuracy and F1. Interestingly, the AUC remains relatively high, showing that while predictions are noisy, the model still ranks classes reasonably well. |
+| Random Forest       | Excellent performance; balanced metrics and near-perfect AUC. By averaging across many trees, it reduces overfitting and variance. It is more stable than a single decision tree and handles feature interactions effectively. |
+| XGBoost             | Best overall performer; slightly outperforms Random Forest in all metrics. Gradient boosting captures subtle patterns and optimizes errors iteratively, giving it an edge. It is computationally heavier but provides the most reliable predictions in this task. |
 
 ---
