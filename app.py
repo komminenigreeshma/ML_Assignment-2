@@ -12,7 +12,19 @@ from sklearn.metrics import (
 # Page config
 st.set_page_config(page_title="ML Assignment 2", page_icon="📊", layout="wide")
 
-# Custom header
+# Background color styling
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background-color: #f0f4f8; /* soft gray-blue background */
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# Gradient header banner
 st.markdown(
     """
     <div style="background: linear-gradient(to right, #4facfe, #00f2fe);
@@ -78,7 +90,7 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
     model = models[model_choice]
     y_pred = model.predict(X_test_scaled)
 
-    tab1, tab2, tab3 = st.tabs(["📈 Metrics", "📊 Confusion Matrix", "📑 Classification Report"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📈 Metrics", "📊 Confusion Matrix", "📑 Classification Report", "📊 Per-Class Performance"])
 
     with tab1:
         st.subheader(f"Results for {model_choice}")
@@ -109,6 +121,16 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         report_df = pd.DataFrame(report_dict).transpose()
         st.dataframe(report_df.style.highlight_max(axis=0))
         st.download_button("📥 Download Report", report_df.to_csv().encode("utf-8"), "classification_report.csv", "text/csv")
+
+    with tab4:
+        st.subheader("Per-Class F1 Scores")
+        metrics_df = pd.DataFrame(report_dict).transpose().iloc[:-3]  # exclude avg rows
+        fig, ax = plt.subplots(figsize=(14, 6))
+        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], palette="magma", ax=ax)
+        plt.xticks(rotation=45)
+        plt.ylabel("F1 Score")
+        plt.title("Per-Class F1 Scores (A–Z)")
+        st.pyplot(fig)
 
     output_df = test_df.copy()
     output_df["Predicted"] = le.inverse_transform(y_pred)
