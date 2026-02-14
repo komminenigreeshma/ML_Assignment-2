@@ -16,16 +16,29 @@ st.set_page_config(page_title="ML Assignment 2", page_icon="📊", layout="wide"
 st.markdown(
     """
     <style>
-    /* Light theme styling */
-    [data-theme="light"] .t-label {
-        color: #000000;   /* black text for visibility */
+    /* Dark theme (keep your old colors) */
+    [data-theme="dark"] .t-label {
+        color: #f0f0f0;   /* light text */
         font-weight: 600;
     }
+    [data-theme="dark"] h1, h2, h3, h4, h5, h6 {
+        color: #00c9a7;   /* teal accent for headers */
+    }
+    [data-theme="dark"] .stApp {
+        background-color: #1e1e2f; /* deep navy background */
+    }
 
-    /* Dark theme styling */
-    [data-theme="dark"] .t-label {
-        color: #ffffff;   /* white text for visibility */
+    /* Light theme (fix visibility issues) */
+    [data-theme="light"] .t-label {
+        color: #000000;   /* black text */
         font-weight: 600;
+    }
+    [data-theme="light"] h1, h2, h3, h4, h5, h6 {
+        color: #006699;   /* strong navy accent for headers */
+    }
+    [data-theme="light"] .stApp {
+        background-color: #ffffff; /* white background */
+        color: #000000; /* dark text */
     }
 
     /* Gradient header banner styling */
@@ -90,6 +103,12 @@ st.sidebar.markdown('<span class="t-label">🎛️ Model & Data Settings</span>'
 with st.sidebar.expander("🧩 Choose Model & Upload Data", expanded=True):
     model_choice = st.selectbox("Select Model", ["-- Select Model --"] + list(models.keys()))
     uploaded_file = st.file_uploader("Upload Test CSV", type=["csv"])
+
+# Example labels T1–T4
+st.sidebar.markdown('<span class="t-label">T1</span>', unsafe_allow_html=True)
+st.sidebar.markdown('<span class="t-label">T2</span>', unsafe_allow_html=True)
+st.sidebar.markdown('<span class="t-label">T3</span>', unsafe_allow_html=True)
+st.sidebar.markdown('<span class="t-label">T4</span>', unsafe_allow_html=True)
 
 # Main logic
 if uploaded_file is not None and model_choice != "-- Select Model --":
