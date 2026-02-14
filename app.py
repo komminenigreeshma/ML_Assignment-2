@@ -135,11 +135,18 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
     with tab4:
         st.subheader("Per-Class F1 Scores")
         metrics_df = pd.DataFrame(report_dict).transpose().iloc[:-3]  # exclude avg rows
+
         fig, ax = plt.subplots(figsize=(14, 6))
-        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], palette="viridis", ax=ax)
-        plt.xticks(rotation=45, color="#f0f0f0")
-        plt.ylabel("F1 Score", color="#f0f0f0")
-        plt.title("Per-Class F1 Scores (A–Z)", color="#00c9a7")
+        # Use single accent color for all bars
+        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], color="#4682B4", ax=ax)
+
+        # Force x-axis labels (A–Z) to be visible and styled
+        plt.xticks(rotation=45, color="#4682B4", fontsize=10)
+        plt.ylabel("F1 Score", color="#4682B4", fontsize=12)
+        plt.title("Per-Class F1 Scores (A–Z)", color="#4682B4", fontsize=14)
+
+        # Ensure tick labels (letters) are not cut off
+        plt.tight_layout()
         st.pyplot(fig)
 
     output_df = test_df.copy()
