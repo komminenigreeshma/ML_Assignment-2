@@ -1,7 +1,7 @@
 # ML_Assignment-2
 
 ## Problem Statement
-The aim of this assignment is to design and evaluate six machine learning classification models on the UCI Letter Recognition dataset, compare their performance using multiple evaluation metrics, and present the results through a fully interactive Streamlit web application. The project demonstrates an end‑to‑end ML workflow including dataset handling, model training, metric analysis, user interface development, and deployment on Streamlit Community Cloud.
+The goal of this assignment is to apply six different machine learning classification algorithms to the UCI Letter Recognition dataset. This dataset contains thousands of samples of alphabet characters represented by numerical features. Each model is trained and tested on the dataset, and their performance is compared using evaluation metrics such as Accuracy, AUC, Precision, Recall, F1 Score, and MCC. The outcomes are presented through an interactive Streamlit application that enables users to upload test data, choose models, view performance metrics, visualize confusion matrices, and download predictions. The assignment simulates a practical ML workflow that includes model building, evaluation, interface design, and deployment on Streamlit Community Cloud.
 
 ---
 
@@ -10,7 +10,12 @@ The aim of this assignment is to design and evaluate six machine learning classi
 - **Instances**: 20,000  
 - **Features**: 16 numerical attributes (statistical features of letter images)  
 - **Target**: 26 classes (A–Z letters)  
-- **Task**: Multi-class classification  
+- **Task**: Multi-class classification
+- **Why This Dataset**:
+    - The dataset is sufficiently large (20,000 samples), which ensures reliable training and testing across multiple models.
+    - Its numeric attributes make it compatible with a wide range of algorithms, from simple linear classifiers to advanced ensemble methods, allowing meaningful performance       comparisons.
+    - With 26 output classes and several letters that share similar visual characteristics (e.g., O vs. Q, C vs. G), the dataset introduces complexity that challenges models       to distinguish subtle differences.
+    - This variety provides an excellent opportunity to evaluate how simpler approaches (such as Logistic Regression and Naive Bayes) perform relative to more sophisticated        ensemble techniques (like Random Forest and XGBoost).
 
 ---
 
