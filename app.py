@@ -23,6 +23,12 @@ st.markdown(
     h1, h2, h3, h4, h5, h6 {
         color: #004c99; /* deep blue accent for headers */
     }
+    footer {
+        text-align: center;
+        padding: 10px;
+        font-size: 14px;
+        color: #666666;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -127,7 +133,7 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         st.subheader("Detailed Classification Report")
         report_dict = classification_report(y_test, y_pred, target_names=le.classes_, output_dict=True)
         report_df = pd.DataFrame(report_dict).transpose()
-        # Drop redundant support=4000 rows for clarity
+        # Clean redundant support values
         report_df.loc[["accuracy","macro avg","weighted avg"],"support"] = ""
         st.dataframe(report_df.style.highlight_max(axis=0))
         st.download_button("📥 Download Report", report_df.to_csv().encode("utf-8"), "classification_report.csv", "text/csv")
@@ -149,6 +155,16 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         data=output_df.to_csv(index=False),
         file_name="predictions.csv",
         mime="text/csv"
+    )
+
+    # Footer
+    st.markdown(
+        """
+        <footer>
+        Created by <b>Kommineni Greeshma</b>, 2025AA05823
+        </footer>
+        """,
+        unsafe_allow_html=True
     )
 
 elif uploaded_file is not None and model_choice == "-- Select Model --":
