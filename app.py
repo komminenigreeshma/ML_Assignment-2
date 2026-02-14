@@ -9,9 +9,20 @@ from sklearn.metrics import (
     confusion_matrix, classification_report, roc_auc_score, matthews_corrcoef
 )
 
-# Title
-st.title("📊 ML Assignment 2 - Letter Recognition")
-st.markdown("An interactive app to evaluate multiple ML models on the UCI Letter Recognition dataset.")
+# Page config
+st.set_page_config(page_title="ML Assignment 2", page_icon="📊", layout="wide")
+
+# Custom header
+st.markdown(
+    """
+    <div style="background: linear-gradient(to right, #4facfe, #00f2fe);
+                padding: 15px; border-radius: 8px; text-align: center;">
+        <h1 style="color: white;">ML Assignment 2 - Letter Recognition</h1>
+        <p style="color: white; font-size: 16px;">Interactive evaluation of multiple ML models on the UCI dataset</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 # Load models and preprocessors
 scaler = joblib.load("models/scaler.pkl")
@@ -25,12 +36,12 @@ models = {
     "XGBoost": joblib.load("models/xgboost.pkl"),
 }
 
-# Sidebar controls
+# Sidebar
 st.sidebar.header("⚙️ Controls")
-model_choice = st.sidebar.selectbox("Select Model", ["-- Select Model --"] + list(models.keys()))
-uploaded_file = st.sidebar.file_uploader("Upload Test CSV", type=["csv"])
+with st.sidebar.expander("Model Selection & Data Upload", expanded=True):
+    model_choice = st.selectbox("Select Model", ["-- Select Model --"] + list(models.keys()))
+    uploaded_file = st.file_uploader("Upload Test CSV", type=["csv"])
 
-# Option to download sample test file
 try:
     with open("dataset/test.csv", "rb") as f:
         st.sidebar.download_button(
@@ -42,21 +53,17 @@ try:
 except FileNotFoundError:
     st.sidebar.warning("No test.csv found. Run Training_model.py to generate it.")
 
-# Run only if a file is uploaded and a model is selected
+# Main logic
 if uploaded_file is not None and model_choice != "-- Select Model --":
     test_df = pd.read_csv(uploaded_file)
 
-    # Preview dataset
-    st.subheader("📂 Uploaded Dataset Preview")
+    st.markdown("### 📂 Uploaded Dataset Preview")
     st.dataframe(test_df.head())
 
-    # Check for 'letter' column
     if "letter" not in test_df.columns:
         st.error("Uploaded file must contain a 'letter' column for labels.")
-        st.write("Columns found:", list(test_df.columns))
         st.stop()
 
-    # Feature alignment
     expected_features = ["x-box","y-box","width","height","onpix","x-bar","y-bar",
                          "x2bar","y2bar","xybar","x2ybr","xy2br","x-ege","xegvy","y-ege","yegvx"]
     if list(test_df.drop("letter", axis=1).columns) != expected_features:
@@ -64,17 +71,14 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         st.write(expected_features)
         st.stop()
 
-    # Preprocess
     X_test = test_df.drop("letter", axis=1)
     y_test = le.transform(test_df["letter"])
     X_test_scaled = scaler.transform(X_test)
 
-    # Predict
     model = models[model_choice]
     y_pred = model.predict(X_test_scaled)
 
-    # Tabs for results
-    tab1, tab2, tab3, tab4 = st.tabs(["📈 Metrics", "📊 Confusion Matrix", "📑 Classification Report", "📊 Per-Class Metrics"])
+    tab1, tab2, tab3 = st.tabs(["📈 Metrics", "📊 Confusion Matrix", "📑 Classification Report"])
 
     with tab1:
         st.subheader(f"Results for {model_choice}")
@@ -88,22 +92,16 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
 
     with tab2:
         st.subheader("Confusion Matrix")
-        view_choice = st.radio("Choose View", ["Heatmap", "Raw Matrix", "Normalized"])
         cm = confusion_matrix(y_test, y_pred)
-        if view_choice == "Heatmap":
-            fig, ax = plt.subplots(figsize=(12, 8))
-            sns.heatmap(cm, annot=False, cmap="Blues", ax=ax,
-                        xticklabels=le.classes_, yticklabels=le.classes_)
-            ax.set_xlabel("Predicted")
-            ax.set_ylabel("True")
-            st.pyplot(fig)
-        elif view_choice == "Raw Matrix":
-            cm_df = pd.DataFrame(cm, index=le.classes_, columns=le.classes_)
-            st.dataframe(cm_df)
-        elif view_choice == "Normalized":
-            cm_norm = cm.astype('float') / cm.sum(axis=1, keepdims=True)
-            cm_df = pd.DataFrame(cm_norm, index=le.classes_, columns=le.classes_)
-            st.dataframe(cm_df.style.format("{:.2f}"))
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.heatmap(cm, annot=True, fmt="d", cmap="viridis", ax=ax,
+                    xticklabels=le.classes_, yticklabels=le.classes_,
+                    cbar_kws={'label': 'Number of Samples'})
+        ax.set_xlabel("Predicted", fontsize=12, fontweight="bold")
+        ax.set_ylabel("True", fontsize=12, fontweight="bold")
+        plt.xticks(rotation=45)
+        plt.yticks(rotation=0)
+        st.pyplot(fig)
 
     with tab3:
         st.subheader("Detailed Classification Report")
@@ -112,18 +110,6 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         st.dataframe(report_df.style.highlight_max(axis=0))
         st.download_button("📥 Download Report", report_df.to_csv().encode("utf-8"), "classification_report.csv", "text/csv")
 
-    with tab4:
-        st.subheader("Per-Class Metrics (Precision, Recall, F1)")
-        report_dict = classification_report(y_test, y_pred, target_names=le.classes_, output_dict=True)
-        metrics_df = pd.DataFrame(report_dict).transpose().iloc[:-3]  # exclude avg rows
-        fig, ax = plt.subplots(figsize=(14, 6))
-        metrics_df[["precision", "recall", "f1-score"]].plot(kind="bar", ax=ax)
-        plt.xticks(rotation=45)
-        plt.ylabel("Score")
-        plt.title("Per-Class Metrics")
-        st.pyplot(fig)
-
-    # Option to download predictions
     output_df = test_df.copy()
     output_df["Predicted"] = le.inverse_transform(y_pred)
     st.download_button(
