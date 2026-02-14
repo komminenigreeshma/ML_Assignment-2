@@ -12,16 +12,21 @@ from sklearn.metrics import (
 # Page config
 st.set_page_config(page_title="ML Assignment 2", page_icon="📊", layout="wide")
 
-# Light theme styling
+# Two-color theme styling
 st.markdown(
     """
     <style>
     .stApp {
         background-color: #ffffff; /* clean white background */
-        color: #333333; /* dark text for readability */
+        color: #333333; /* dark text */
     }
     h1, h2, h3, h4, h5, h6 {
-        color: #004c99; /* deep blue accent for headers */
+        color: #004c99; /* primary deep blue */
+    }
+    .stMetric {
+        background-color: #e6f7f9; /* light teal background for metric cards */
+        border-radius: 8px;
+        padding: 10px;
     }
     footer {
         text-align: center;
@@ -37,7 +42,7 @@ st.markdown(
 # Gradient header banner
 st.markdown(
     """
-    <div style="background: linear-gradient(to right, #4facfe, #00c9a7);
+    <div style="background: linear-gradient(to right, #004c99, #00c9a7);
                 padding: 20px; border-radius: 8px; text-align: center;">
         <h1 style="color: white; font-size: 36px;">ML Assignment 2 - Letter Recognition</h1>
         <p style="color: white; font-size: 18px;">Interactive evaluation of ML models on the UCI dataset</p>
@@ -133,19 +138,18 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         st.subheader("Detailed Classification Report")
         report_dict = classification_report(y_test, y_pred, target_names=le.classes_, output_dict=True)
         report_df = pd.DataFrame(report_dict).transpose()
-        # Clean redundant support values
-        report_df.loc[["accuracy","macro avg","weighted avg"],"support"] = ""
-        st.dataframe(report_df.style.highlight_max(axis=0))
+        # Display full table without cutting rows
+        st.dataframe(report_df, use_container_width=True)
         st.download_button("📥 Download Report", report_df.to_csv().encode("utf-8"), "classification_report.csv", "text/csv")
 
     with tab4:
         st.subheader("Per-Class F1 Scores")
         metrics_df = pd.DataFrame(report_dict).transpose().iloc[:-3]  # exclude avg rows
         fig, ax = plt.subplots(figsize=(14, 6))
-        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], palette="magma", ax=ax)
+        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], palette=["#004c99", "#00c9a7"], ax=ax)
         plt.xticks(rotation=45)
         plt.ylabel("F1 Score")
-        plt.title("Per-Class F1 Scores (A–Z)")
+        plt.title("Per-Class F1 Scores (A–Z)", color="#004c99")
         st.pyplot(fig)
 
     output_df = test_df.copy()
