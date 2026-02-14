@@ -56,15 +56,24 @@ models = {
 }
 
 # Sidebar
-st.sidebar.header("📖 Quick Guide")
-with st.sidebar.expander("💡 How to Use", expanded=True):
-    st.write("1. Upload a test CSV file.\n2. Select a model.\n3. View metrics, confusion matrix, and classification report.\n4. Download predictions if needed.")
 
+# Quick Guide (collapsed by default)
+st.sidebar.header("📖 Quick Guide")
+with st.sidebar.expander("💡 How to Use", expanded=False):  # collapsed initially
+    st.write(
+        "1. Upload a test CSV file.\n"
+        "2. Select a model.\n"
+        "3. View metrics, confusion matrix, and classification report.\n"
+        "4. Download predictions if needed."
+    )
+
+# Model & Data Settings
 st.sidebar.header("🎛️ Model & Data Settings")
-with st.sidebar.expander("🧩 Choose Model & Upload Data", expanded=True):
+with st.sidebar.expander("🧩 Choose Model & Upload Data", expanded=True):  # open by default
     model_choice = st.selectbox("Select Model", ["-- Select Model --"] + list(models.keys()))
     uploaded_file = st.file_uploader("Upload Test CSV", type=["csv"])
 
+# Sample file download
 try:
     with open("dataset/test.csv", "rb") as f:
         st.sidebar.download_button(
