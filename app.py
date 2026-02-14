@@ -12,32 +12,29 @@ from sklearn.metrics import (
 # Page config
 st.set_page_config(page_title="ML Assignment 2", page_icon="📊", layout="wide")
 
-# Dark theme styling
+# Light theme styling
 st.markdown(
     """
     <style>
     .stApp {
-        background-color: #1e1e2f; /* deep navy background */
-        color: #f0f0f0; /* light text */
+        background-color: #ffffff; /* clean white background */
+        color: #333333; /* dark text for readability */
     }
     h1, h2, h3, h4, h5, h6 {
-        color: #00c9a7; /* teal accent for headers */
-    }
-    .css-1d391kg, .css-1v3fvcr {
-        background-color: #2a2a3d !important; /* darker cards/containers */
+        color: #004c99; /* deep blue accent for headers */
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Gradient header banner (dark-friendly colors)
+# Gradient header banner
 st.markdown(
     """
-    <div style="background: linear-gradient(to right, #141e30, #243b55);
+    <div style="background: linear-gradient(to right, #4facfe, #00c9a7);
                 padding: 20px; border-radius: 8px; text-align: center;">
-        <h1 style="color: #00c9a7; font-size: 36px;">ML Assignment 2 - Letter Recognition</h1>
-        <p style="color: #f0f0f0; font-size: 18px;">Interactive evaluation of ML models on the UCI dataset</p>
+        <h1 style="color: white; font-size: 36px;">ML Assignment 2 - Letter Recognition</h1>
+        <p style="color: white; font-size: 18px;">Interactive evaluation of ML models on the UCI dataset</p>
     </div>
     """,
     unsafe_allow_html=True
@@ -104,31 +101,34 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
 
     with tab1:
         st.subheader(f"Results for {model_choice}")
-        col1, col2, col3, col4, col5, col6 = st.columns(6)
-        col1.metric("Accuracy", f"{accuracy_score(y_test, y_pred):.4f}")
-        col2.metric("Precision", f"{precision_score(y_test, y_pred, average='macro'):.4f}")
-        col3.metric("Recall", f"{recall_score(y_test, y_pred, average='macro'):.4f}")
-        col4.metric("F1 Score", f"{f1_score(y_test, y_pred, average='macro'):.4f}")
-        col5.metric("AUC", f"{roc_auc_score(pd.get_dummies(y_test), pd.get_dummies(y_pred), average='macro'):.4f}")
-        col6.metric("MCC", f"{matthews_corrcoef(y_test, y_pred):.4f}")
+        cols = st.columns(3)
+        cols[0].metric("Accuracy", f"{accuracy_score(y_test, y_pred):.4f}")
+        cols[1].metric("Precision", f"{precision_score(y_test, y_pred, average='macro'):.4f}")
+        cols[2].metric("Recall", f"{recall_score(y_test, y_pred, average='macro'):.4f}")
+        cols = st.columns(3)
+        cols[0].metric("F1 Score", f"{f1_score(y_test, y_pred, average='macro'):.4f}")
+        cols[1].metric("AUC", f"{roc_auc_score(pd.get_dummies(y_test), pd.get_dummies(y_pred), average='macro'):.4f}")
+        cols[2].metric("MCC", f"{matthews_corrcoef(y_test, y_pred):.4f}")
 
     with tab2:
         st.subheader("Confusion Matrix")
         cm = confusion_matrix(y_test, y_pred)
         fig, ax = plt.subplots(figsize=(12, 8))
-        sns.heatmap(cm, annot=True, fmt="d", cmap="coolwarm", ax=ax,
+        sns.heatmap(cm, annot=True, fmt="d", cmap="Blues", ax=ax,
                     xticklabels=le.classes_, yticklabels=le.classes_,
                     cbar_kws={'label': 'Number of Samples'})
-        ax.set_xlabel("Predicted", fontsize=12, fontweight="bold", color="#f0f0f0")
-        ax.set_ylabel("True", fontsize=12, fontweight="bold", color="#f0f0f0")
-        plt.xticks(rotation=45, color="#f0f0f0")
-        plt.yticks(rotation=0, color="#f0f0f0")
+        ax.set_xlabel("Predicted", fontsize=12, fontweight="bold")
+        ax.set_ylabel("True", fontsize=12, fontweight="bold")
+        plt.xticks(rotation=45)
+        plt.yticks(rotation=0)
         st.pyplot(fig)
 
     with tab3:
         st.subheader("Detailed Classification Report")
         report_dict = classification_report(y_test, y_pred, target_names=le.classes_, output_dict=True)
         report_df = pd.DataFrame(report_dict).transpose()
+        # Drop redundant support=4000 rows for clarity
+        report_df.loc[["accuracy","macro avg","weighted avg"],"support"] = ""
         st.dataframe(report_df.style.highlight_max(axis=0))
         st.download_button("📥 Download Report", report_df.to_csv().encode("utf-8"), "classification_report.csv", "text/csv")
 
@@ -136,10 +136,10 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         st.subheader("Per-Class F1 Scores")
         metrics_df = pd.DataFrame(report_dict).transpose().iloc[:-3]  # exclude avg rows
         fig, ax = plt.subplots(figsize=(14, 6))
-        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], palette="viridis", ax=ax)
-        plt.xticks(rotation=45, color="#f0f0f0")
-        plt.ylabel("F1 Score", color="#f0f0f0")
-        plt.title("Per-Class F1 Scores (A–Z)", color="#00c9a7")
+        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], palette="magma", ax=ax)
+        plt.xticks(rotation=45)
+        plt.ylabel("F1 Score")
+        plt.title("Per-Class F1 Scores (A–Z)")
         st.pyplot(fig)
 
     output_df = test_df.copy()
