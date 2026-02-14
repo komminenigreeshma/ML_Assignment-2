@@ -12,32 +12,40 @@ from sklearn.metrics import (
 # Page config
 st.set_page_config(page_title="ML Assignment 2", page_icon="📊", layout="wide")
 
-# Dark theme styling
+# Force dark theme styling (lock app to dark mode)
 st.markdown(
     """
     <style>
+    /* Force dark theme look everywhere */
     .stApp {
-        background-color: #1e1e2f; /* deep navy background */
-        color: #f0f0f0; /* light text */
+        background-color: #1e1e2f !important; /* deep navy background */
+        color: #f0f0f0 !important;           /* light text */
     }
     h1, h2, h3, h4, h5, h6 {
-        color: #00c9a7; /* teal accent for headers */
+        color: #00c9a7 !important;           /* teal accent for headers */
     }
-    .css-1d391kg, .css-1v3fvcr {
-        background-color: #2a2a3d !important; /* darker cards/containers */
+    .stSidebar, .css-1d391kg, .css-1v3fvcr {
+        background-color: #2a2a3d !important; /* darker sidebar/cards */
+    }
+    .t-label {
+        color: #f0f0f0 !important;           /* consistent light text for labels */
+        font-weight: 600;
+    }
+    .banner {
+        background: linear-gradient(to right, #141e30, #243b55);
+        padding: 20px; border-radius: 8px; text-align: center;
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-# Gradient header banner (dark-friendly colors)
+# Gradient header banner
 st.markdown(
     """
-    <div style="background: linear-gradient(to right, #141e30, #243b55);
-                padding: 20px; border-radius: 8px; text-align: center;">
-        <h1 style="color: #00c9a7; font-size: 36px;">ML Assignment 2 - Letter Recognition</h1>
-        <p style="color: #f0f0f0; font-size: 18px;">Interactive evaluation of ML models on the UCI dataset</p>
+    <div class="banner">
+        <h1 class="t-label" style="font-size: 36px;">ML Assignment 2 - Letter Recognition</h1>
+        <p class="t-label" style="font-size: 18px;">Interactive evaluation of ML models on the UCI dataset</p>
     </div>
     """,
     unsafe_allow_html=True
@@ -57,12 +65,9 @@ models = {
 
 # Sidebar
 
-# Quick Guide (smaller size, collapsed by default)
-st.sidebar.markdown(
-    "<h4 style='color:#00c9a7; margin-bottom:0;'>📖 Quick Guide</h4>",
-    unsafe_allow_html=True
-)
-with st.sidebar.expander("💡 How to Use", expanded=False):  # collapsed initially
+# Quick Guide
+st.sidebar.markdown('<span class="t-label">📖 Quick Guide</span>', unsafe_allow_html=True)
+with st.sidebar.expander("💡 How to Use", expanded=False):
     st.write(
         "1. Upload a test CSV file.\n"
         "2. Select a model.\n"
@@ -83,10 +88,7 @@ except FileNotFoundError:
     st.sidebar.warning("No test.csv found. Run Training_model.py to generate it.")
 
 # Model & Data Settings
-st.sidebar.markdown(
-    "<h4 style='color:#00c9a7; margin-bottom:0;'>🎛️ Model & Data Settings</h4>",
-    unsafe_allow_html=True
-)
+st.sidebar.markdown('<span class="t-label">🎛️ Model & Data Settings</span>', unsafe_allow_html=True)
 with st.sidebar.expander("🧩 Choose Model & Upload Data", expanded=True):
     model_choice = st.selectbox("Select Model", ["-- Select Model --"] + list(models.keys()))
     uploaded_file = st.file_uploader("Upload Test CSV", type=["csv"])
@@ -95,7 +97,7 @@ with st.sidebar.expander("🧩 Choose Model & Upload Data", expanded=True):
 if uploaded_file is not None and model_choice != "-- Select Model --":
     test_df = pd.read_csv(uploaded_file)
 
-    st.markdown("### 📂 Uploaded Dataset Preview")
+    st.markdown('<span class="t-label">📂 Uploaded Dataset Preview</span>', unsafe_allow_html=True)
     st.dataframe(test_df.head())
 
     if "letter" not in test_df.columns:
@@ -151,17 +153,11 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
     with tab4:
         st.subheader("Per-Class F1 Scores")
         metrics_df = pd.DataFrame(report_dict).transpose().iloc[:-3]  # exclude avg rows
-
         fig, ax = plt.subplots(figsize=(14, 6))
-        # Use single accent color for all bars
         sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], color="#4682B4", ax=ax)
-
-        # Force x-axis labels (A–Z) to be visible and styled
-        plt.xticks(rotation=45, color="#4682B4", fontsize=10)
-        plt.ylabel("F1 Score", color="#4682B4", fontsize=12)
-        plt.title("Per-Class F1 Scores (A–Z)", color="#4682B4", fontsize=14)
-
-        # Ensure tick labels (letters) are not cut off
+        plt.xticks(rotation=45, color="#f0f0f0", fontsize=10)
+        plt.ylabel("F1 Score", color="#f0f0f0", fontsize=12)
+        plt.title("Per-Class F1 Scores (A–Z)", color="#f0f0f0", fontsize=14)
         plt.tight_layout()
         st.pyplot(fig)
 
