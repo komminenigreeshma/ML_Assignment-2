@@ -12,7 +12,7 @@ from sklearn.metrics import (
 # Page config
 st.set_page_config(page_title="ML Assignment 2", page_icon="📊", layout="wide")
 
-# Global styling (two-color theme + beige sidebar)
+# Global styling (pastel theme + beige sidebar)
 st.markdown(
     """
     <style>
@@ -24,33 +24,33 @@ st.markdown(
 
     /* Headers */
     h1, h2, h3, h4, h5, h6 {
-        color: #004c99; /* deep blue */
+        color: #6CA6CD; /* pastel blue */
     }
 
     /* Metrics cards */
     .stMetric {
-        background-color: #e6f7f9; /* light teal background */
+        background-color: #E0F7FA; /* pale blue */
         border-radius: 8px;
         padding: 10px;
-        color: #004c99; /* ensure metric labels are visible */
+        color: #333333; /* ensure metric labels are visible */
     }
 
     /* Sidebar background */
     [data-testid="stSidebar"] {
-        background-color: #f5f5dc; /* beige */
-        color: #004c99; /* deep blue text */
+        background-color: #FAF3E0; /* light beige */
+        color: #333333; /* dark text */
     }
 
     /* Sidebar headers */
     [data-testid="stSidebar"] h1, 
     [data-testid="stSidebar"] h2, 
     [data-testid="stSidebar"] h3 {
-        color: #004c99;
+        color: #6CA6CD; /* pastel blue */
     }
 
     /* Sidebar expander headers */
     [data-testid="stSidebar"] .st-expanderHeader {
-        background-color: #00c9a7 !important; /* teal accent */
+        background-color: #FF7F50 !important; /* coral accent */
         color: white !important;
         border-radius: 5px;
     }
@@ -59,14 +59,14 @@ st.markdown(
     [data-testid="stSidebar"] .stSelectbox, 
     [data-testid="stSidebar"] .stFileUploader {
         background-color: #ffffff !important;
-        color: #004c99 !important;
-        border: 1px solid #00c9a7 !important;
+        color: #333333 !important;
+        border: 1px solid #FF7F50 !important;
         border-radius: 5px;
     }
 
     /* Sidebar buttons */
     [data-testid="stSidebar"] button {
-        background-color: #00c9a7 !important;
+        background-color: #FF7F50 !important;
         color: white !important;
         border-radius: 5px;
     }
@@ -86,7 +86,7 @@ st.markdown(
 # Gradient header banner
 st.markdown(
     """
-    <div style="background: linear-gradient(to right, #004c99, #00c9a7);
+    <div style="background: linear-gradient(to right, #6CA6CD, #FF7F50);
                 padding: 20px; border-radius: 8px; text-align: center;">
         <h1 style="color: white; font-size: 36px;">ML Assignment 2 - Letter Recognition</h1>
         <p style="color: white; font-size: 18px;">Interactive evaluation of ML models on the UCI dataset</p>
@@ -189,13 +189,13 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         st.subheader("Per-Class F1 Scores")
         metrics_df = pd.DataFrame(report_dict).transpose().iloc[:-3]  # exclude avg rows
         fig, ax = plt.subplots(figsize=(14, 6))
-        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], palette=["#004c99", "#00c9a7"], ax=ax)
+        sns.barplot(x=metrics_df.index, y=metrics_df["f1-score"], palette=["#6CA6CD", "#FF7F50"], ax=ax)
         plt.xticks(rotation=45)
         plt.ylabel("F1 Score")
-        plt.title("Per-Class F1 Scores (A–Z)", color="#004c99")
+        plt.title("Per-Class F1 Scores (A–Z)", color="#6CA6CD")
         st.pyplot(fig)
 
-    output_df = test_df.copy()
+        output_df = test_df.copy()
     output_df["Predicted"] = le.inverse_transform(y_pred)
     st.download_button(
         label="📥 Download Predictions",
