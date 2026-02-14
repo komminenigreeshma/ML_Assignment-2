@@ -3,6 +3,7 @@ import pandas as pd
 import joblib
 import seaborn as sns
 import matplotlib.pyplot as plt
+import numpy as np
 from sklearn.metrics import (
     accuracy_score, precision_score, recall_score, f1_score,
     confusion_matrix, classification_report, roc_auc_score, matthews_corrcoef
@@ -100,7 +101,7 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
             cm_df = pd.DataFrame(cm, index=le.classes_, columns=le.classes_)
             st.dataframe(cm_df)
         elif view_choice == "Normalized":
-            cm_norm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+            cm_norm = cm.astype('float') / cm.sum(axis=1, keepdims=True)
             cm_df = pd.DataFrame(cm_norm, index=le.classes_, columns=le.classes_)
             st.dataframe(cm_df.style.format("{:.2f}"))
 
