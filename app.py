@@ -74,7 +74,7 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
     y_pred = model.predict(X_test_scaled)
 
     # Tabs for results
-    tab1, tab2, tab3, tab4 = st.tabs(["📈 Metrics", "📊 Confusion Matrix", "📑 Classification Report", "📊 Per-Class Metrics"])
+    tab1, tab2, tab3 = st.tabs(["📈 Metrics", "📊 Confusion Matrix", "📑 Classification Report"])
 
     with tab1:
         st.subheader(f"Results for {model_choice}")
@@ -88,22 +88,13 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
 
     with tab2:
         st.subheader("Confusion Matrix")
-        view_choice = st.radio("Choose View", ["Heatmap", "Raw Matrix", "Normalized"])
         cm = confusion_matrix(y_test, y_pred)
-        if view_choice == "Heatmap":
-            fig, ax = plt.subplots(figsize=(12, 8))
-            sns.heatmap(cm, annot=False, cmap="Blues", ax=ax,
-                        xticklabels=le.classes_, yticklabels=le.classes_)
-            ax.set_xlabel("Predicted")
-            ax.set_ylabel("True")
-            st.pyplot(fig)
-        elif view_choice == "Raw Matrix":
-            cm_df = pd.DataFrame(cm, index=le.classes_, columns=le.classes_)
-            st.dataframe(cm_df)
-        elif view_choice == "Normalized":
-            cm_norm = cm.astype('float') / cm.sum(axis=1, keepdims=True)
-            cm_df = pd.DataFrame(cm_norm, index=le.classes_, columns=le.classes_)
-            st.dataframe(cm_df.style.format("{:.2f}"))
+        fig, ax = plt.subplots(figsize=(12, 8))
+        sns.heatmap(cm, annot=False, cmap="Blues", ax=ax,
+                    xticklabels=le.classes_, yticklabels=le.classes_)
+        ax.set_xlabel("Predicted")
+        ax.set_ylabel("True")
+        st.pyplot(fig)
 
     with tab3:
         st.subheader("Detailed Classification Report")
@@ -111,17 +102,6 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         report_df = pd.DataFrame(report_dict).transpose()
         st.dataframe(report_df.style.highlight_max(axis=0))
         st.download_button("📥 Download Report", report_df.to_csv().encode("utf-8"), "classification_report.csv", "text/csv")
-
-    with tab4:
-        st.subheader("Per-Class Metrics (Precision, Recall, F1)")
-        report_dict = classification_report(y_test, y_pred, target_names=le.classes_, output_dict=True)
-        metrics_df = pd.DataFrame(report_dict).transpose().iloc[:-3]  # exclude avg rows
-        fig, ax = plt.subplots(figsize=(14, 6))
-        metrics_df[["precision", "recall", "f1-score"]].plot(kind="bar", ax=ax)
-        plt.xticks(rotation=45)
-        plt.ylabel("Score")
-        plt.title("Per-Class Metrics")
-        st.pyplot(fig)
 
     # Option to download predictions
     output_df = test_df.copy()
