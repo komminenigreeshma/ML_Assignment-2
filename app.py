@@ -12,22 +12,66 @@ from sklearn.metrics import (
 # Page config
 st.set_page_config(page_title="ML Assignment 2", page_icon="📊", layout="wide")
 
-# Two-color theme styling
+# Global styling (two-color theme + beige sidebar)
 st.markdown(
     """
     <style>
+    /* Main app background and text */
     .stApp {
         background-color: #ffffff; /* clean white background */
         color: #333333; /* dark text */
     }
+
+    /* Headers */
     h1, h2, h3, h4, h5, h6 {
-        color: #004c99; /* primary deep blue */
+        color: #004c99; /* deep blue */
     }
+
+    /* Metrics cards */
     .stMetric {
-        background-color: #e6f7f9; /* light teal background for metric cards */
+        background-color: #e6f7f9; /* light teal background */
         border-radius: 8px;
         padding: 10px;
+        color: #004c99; /* ensure metric labels are visible */
     }
+
+    /* Sidebar background */
+    [data-testid="stSidebar"] {
+        background-color: #f5f5dc; /* beige */
+        color: #004c99; /* deep blue text */
+    }
+
+    /* Sidebar headers */
+    [data-testid="stSidebar"] h1, 
+    [data-testid="stSidebar"] h2, 
+    [data-testid="stSidebar"] h3 {
+        color: #004c99;
+    }
+
+    /* Sidebar expander headers */
+    [data-testid="stSidebar"] .st-expanderHeader {
+        background-color: #00c9a7 !important; /* teal accent */
+        color: white !important;
+        border-radius: 5px;
+    }
+
+    /* Sidebar selectbox and file uploader */
+    [data-testid="stSidebar"] .stSelectbox, 
+    [data-testid="stSidebar"] .stFileUploader {
+        background-color: #ffffff !important;
+        color: #004c99 !important;
+        border: 1px solid #00c9a7 !important;
+        border-radius: 5px;
+    }
+
+    /* Sidebar buttons */
+    [data-testid="stSidebar"] button {
+        background-color: #00c9a7 !important;
+        color: white !important;
+        border-radius: 5px;
+    }
+
+    /* Footer */
     footer {
         text-align: center;
         padding: 10px;
@@ -138,7 +182,6 @@ if uploaded_file is not None and model_choice != "-- Select Model --":
         st.subheader("Detailed Classification Report")
         report_dict = classification_report(y_test, y_pred, target_names=le.classes_, output_dict=True)
         report_df = pd.DataFrame(report_dict).transpose()
-        # Display full table without cutting rows
         st.dataframe(report_df, use_container_width=True)
         st.download_button("📥 Download Report", report_df.to_csv().encode("utf-8"), "classification_report.csv", "text/csv")
 
