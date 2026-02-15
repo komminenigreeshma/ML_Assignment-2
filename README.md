@@ -44,3 +44,20 @@ The goal of this assignment is to apply six different machine learning classific
 | XGBoost             | Best overall performer; slightly outperforms Random Forest in all metrics. Gradient boosting captures subtle patterns and optimizes errors iteratively, giving it an edge. It is computationally heavier but provides the most reliable predictions in this task. |
 
 ---
+
+## Final Choice and Conclusion
+- Among the six models implemented, XGBoost consistently delivered the best overall performance across all evaluation metrics, slightly outperforming Random Forest.
+- Best Model: XGBoost
+- Why:
+    - Highest accuracy (96.4%) and MCC (0.963), indicating strong predictive reliability.
+    - Near‑perfect AUC (0.9997), showing excellent class separability.
+    - Balanced precision, recall, and F1 scores, confirming robustness across all classes.
+    - Handles the complexity of 26 classes better than simpler models.
+While Random Forest also performed exceptionally well and is computationally lighter, XGBoost’s marginal improvements across all metrics justify selecting it as the final model of choice.
+
+---
+
+## Conclusion:
+This assignment demonstrates how different algorithms handle the challenges of multi‑class classification. Simpler models like Logistic Regression and Naive Bayes provide baseline insights but struggle with complex decision boundaries. Tree‑based and ensemble methods, particularly Random Forest and XGBoost, excel by leveraging feature interactions and boosting strategies. The deployed Streamlit app allows interactive exploration of these models, making the workflow reproducible, intuitive, and practical for real‑world ML deployment.
+
+---
