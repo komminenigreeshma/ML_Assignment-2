@@ -44,15 +44,15 @@ st.markdown(
 )
 
 # Load models and preprocessors
-scaler = joblib.load("models/scaler.pkl")
-le = joblib.load("models/label_encoder.pkl")
+scaler = joblib.load("model/scaler.pkl")
+le = joblib.load("model/label_encoder.pkl")
 models = {
-    "Logistic Regression": joblib.load("models/log_reg.pkl"),
-    "Decision Tree": joblib.load("models/decision_tree.pkl"),
-    "KNN": joblib.load("models/knn.pkl"),
-    "Naive Bayes": joblib.load("models/naive_bayes.pkl"),
-    "Random Forest": joblib.load("models/random_forest.pkl"),
-    "XGBoost": joblib.load("models/xgboost.pkl"),
+    "Logistic Regression": joblib.load("model/log_reg.pkl"),
+    "Decision Tree": joblib.load("model/decision_tree.pkl"),
+    "KNN": joblib.load("model/knn.pkl"),
+    "Naive Bayes": joblib.load("model/naive_bayes.pkl"),
+    "Random Forest": joblib.load("model/random_forest.pkl"),
+    "XGBoost": joblib.load("model/xgboost.pkl"),
 }
 
 # Sidebar
